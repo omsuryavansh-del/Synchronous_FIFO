@@ -6,5 +6,5 @@ package f_pkg;
     `include "monitor.sv"
     `include "scoreboard.sv"
     `include "environment.sv"
-   // `include "test.sv"
+    `include "test.sv"
 endpackage

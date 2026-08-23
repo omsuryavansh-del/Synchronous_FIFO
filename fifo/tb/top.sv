@@ -6,6 +6,12 @@ import f_pkg::*;
 module top;
 
     reg clk;
+    test tes;
+    random      rtes;
+    write_write wtes;
+    read_read   rdtes;
+    rd_aftr_wr  rwtes;
+    empty_full  eftes;
     environment env;
 
     fifo_if f_if(clk);
@@ -24,19 +30,38 @@ module top;
     always #5 clk = ~clk;
 
     initial begin
+        test queue [$];
         clk = 0;
         f_if.rst_n = 0;
         f_if.write_en = 0;
         f_if.read_en = 0;
         f_if.data_in = 0;
-  
+
         env = new;
-        env.f_if = f_if;   
-        env.connect(); 
+        tes = new;
+        rtes  = new;
+        wtes  = new;
+        rdtes  = new;
+        rwtes = new;
+        eftes = new;
+
+        queue.push_back(rtes);
+        queue.push_back(wtes);
+        queue.push_back(rdtes);
+        queue.push_back(rwtes);
+        queue.push_back(eftes);
+ 
+     
         #10 f_if.rst_n = 1;
-        env.run(5);
+        foreach(queue[i])begin
+            queue[i].env = env;
+            queue[i].f_if = f_if;
+            queue[i].run();
+        end
+        $display("\n=========================================\n");
         $display("Simulation finished successfully!");
-        #500 $finish;
+        $display("total test = %0d || passed = %0d || failed =%0d",env.scb.num_checked,env.scb.pass,env.scb.failed);
+        #1500 $finish;
     end
 
     initial begin 
