@@ -14,6 +14,6 @@ constraint rw_op {
     op == WRITE_OP  -> (write_en == 1 && read_en == 0);
     op == READ_OP   -> (write_en == 0 && read_en == 1);
     op == SIM_OP    -> (write_en == 1 && read_en == 1);
-    op == RAND_OP   -> {write_en dist {1:=50, 0:=50}; read_en dist {1:=50, 0:=50}; write_en != read_en;}
+    op == RAND_OP   -> {write_en dist {1:=1, 0:=1}; read_en dist {1:=1, 0:=1}; write_en != read_en;}
 }
 endclass

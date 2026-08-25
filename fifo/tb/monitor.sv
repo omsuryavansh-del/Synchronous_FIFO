@@ -4,6 +4,7 @@ import f_pkg::*;
 class monitor;
     transaction tr;
     mailbox mon_to_scb;
+    mailbox mon_to_cov;
     virtual fifo_if f_if;
 
     function new;
@@ -23,6 +24,7 @@ class monitor;
         tr.full = f_if.full;
         tr.empty = f_if.empty;
         mon_to_scb.put(tr);
+        mon_to_cov.put(tr);
         $display("transaction sent to scoreboard rst_n = %0b || w_en = %0b || rd_en = %0b || data_in = %0b || data_out = %0b",
                     tr.rst_n,tr.write_en,tr.read_en,tr.data_in,tr.data_out);
         end

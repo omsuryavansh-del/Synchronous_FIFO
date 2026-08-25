@@ -4,6 +4,7 @@ package f_pkg;
     `include "generator.sv"
     `include "driver.sv"
     `include "monitor.sv"
+    `include "coverage.sv"
     `include "scoreboard.sv"
     `include "environment.sv"
     `include "test.sv"

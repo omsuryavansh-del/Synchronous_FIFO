@@ -14,6 +14,7 @@ module top;
     empty_full  eftes;
     environment env;
 
+
     fifo_if f_if(clk);
 
     fifo dut(
@@ -50,14 +51,17 @@ module top;
         queue.push_back(rdtes);
         queue.push_back(rwtes);
         queue.push_back(eftes);
- 
-     
+        
+
         #10 f_if.rst_n = 1;
+
         foreach(queue[i])begin
             queue[i].env = env;
             queue[i].f_if = f_if;
             queue[i].run();
         end
+
+        
         $display("\n=========================================\n");
         $display("Simulation finished successfully!");
         $display("total test = %0d || passed = %0d || failed =%0d",env.scb.num_checked,env.scb.pass,env.scb.failed);

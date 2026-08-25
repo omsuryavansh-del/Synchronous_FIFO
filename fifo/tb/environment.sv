@@ -7,9 +7,11 @@ class environment;
     driver dr;
     monitor mon;
     scoreboard scb;
+    coverage cvg;
 
     mailbox gen_to_drv;
     mailbox mon_to_scb;
+    mailbox mon_to_cov;
 
     function new();
 
@@ -19,12 +21,17 @@ class environment;
         scb = new();
         gen_to_drv = new();
         mon_to_scb = new();
+        mon_to_cov = new();
+        cvg = new();
 
         gen.gen_to_drv = gen_to_drv;
         dr.driver_mbx = gen_to_drv;
 
         mon.mon_to_scb = mon_to_scb;
         scb.scbm = mon_to_scb;
+
+        mon.mon_to_cov = mon_to_cov;
+        cvg.cov = mon_to_cov;
 
     endfunction
 
@@ -34,13 +41,16 @@ class environment;
     endfunction
 
     task random();
+    
         int target = scb.num_checked + 10;
         fork
         gen.generator(10);
         dr.drive();
         mon.monitor();
         scb.check();
+        cvg.run();
         join_none
+
         wait(scb.num_checked == target);
         disable fork;
         $display("\n=========================================\n");
@@ -49,13 +59,16 @@ class environment;
     endtask
 
     task write_write();
+
         int target = scb.num_checked + 8;
         fork
         gen.write_write(8);
         dr.drive();
         mon.monitor();
         scb.check();
+        cvg.run();
         join_none
+
         wait(scb.num_checked == target);
         disable fork;
         $display("\n=========================================\n");
@@ -64,13 +77,16 @@ class environment;
     endtask
 
     task read_read();
+
         int target = scb.num_checked + 8;
         fork
         gen.read_read(8);
         dr.drive();
         mon.monitor();
         scb.check();
+        cvg.run();
         join_none
+
         wait(scb.num_checked == target);
         disable fork;
         $display("\n=========================================\n");
@@ -79,13 +95,16 @@ class environment;
     endtask
 
     task rd_aftr_wr();
+
         int target = scb.num_checked + 16;
         fork
         gen.rd_aftr_wr(8);
         dr.drive();
         mon.monitor();
         scb.check();
+        cvg.run();
         join_none
+
         wait(scb.num_checked == target);
         disable fork;
         $display("\n=========================================\n");
@@ -94,12 +113,14 @@ class environment;
     endtask
 
     task test_full();
+
         int target = scb.num_checked + 16;
         fork
         gen.test_full(8);
         dr.drive();
         mon.monitor();
         scb.check();
+        cvg.run();
         join_none
         
         wait(scb.num_checked == target);
