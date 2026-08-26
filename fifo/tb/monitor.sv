@@ -11,6 +11,7 @@ class monitor;
     endfunction
 
     task monitor();
+
         forever begin
         tr = new;
         @(posedge f_if.clk);
@@ -18,8 +19,8 @@ class monitor;
         tr.rst_n = f_if.rst_n;
         if(f_if.rst_n) begin
         tr.write_en = f_if.write_en;
-        tr.read_en = f_if.read_en ;
-        tr.data_in = f_if.data_in ;
+        tr.read_en = f_if.read_en;
+        tr.data_in = f_if.data_in;
         tr.data_out = f_if.data_out;
         tr.full = f_if.full;
         tr.empty = f_if.empty;
@@ -29,6 +30,7 @@ class monitor;
                     tr.rst_n,tr.write_en,tr.read_en,tr.data_in,tr.data_out);
         end
         end
+        
     endtask
 
 endclass
