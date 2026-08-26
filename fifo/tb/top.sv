@@ -1,6 +1,8 @@
 `timescale 1ns/1ns
 `include "../rtl/fifo.v"
+`include "fifo_assertion.sv"
 `include "fifo_if.sv"
+
 import f_pkg::*;
 
 module top;
@@ -18,14 +20,23 @@ module top;
     fifo_if f_if(clk);
 
     fifo dut(
-            .clk(clk),
-            .rst_n(f_if.rst_n),
-            .write_en(f_if.write_en),
-            .read_en(f_if.read_en),
-            .data_in(f_if.data_in),
-            .data_out(f_if.data_out),
-            .full(f_if.full),
-            .empty(f_if.empty)
+        .clk(clk),
+        .rst_n(f_if.rst_n),
+        .write_en(f_if.write_en),
+        .read_en(f_if.read_en),
+        .data_in(f_if.data_in),
+        .data_out(f_if.data_out),
+        .full(f_if.full),
+        .empty(f_if.empty)
+    );
+
+    bind fifo fifo_assertion f_assert (
+        .clk(clk),
+        .rst_n(f_if.rst_n),
+        .write_en(f_if.write_en),
+        .read_en(f_if.read_en),
+        .full(f_if.full),
+        .empty(f_if.empty)          
     );
 
     always #5 clk = ~clk;
