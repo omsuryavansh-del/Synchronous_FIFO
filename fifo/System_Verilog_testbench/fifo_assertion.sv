@@ -10,18 +10,18 @@ module fifo_assertion(
     endproperty
   
     property write_while_full ;
-    @(posedge clk) disable iff (!rst_n)
-    write_en && full && (!read_en); 
+        @(posedge clk) disable iff (!rst_n)
+        (write_en && full && (!read_en)) |-> (full); 
     endproperty
 
     property reset_clears_fifo;
-    @(posedge clk)
-    $rose(rst_n) |-> empty;
+        @(posedge clk)
+        $rose(rst_n) |-> empty;
     endproperty
 
     property no_unknown_flags;
-    @(posedge clk) disable iff (!rst_n)
-    !$isunknown({full, empty});
+        @(posedge clk) disable iff (!rst_n)
+        !$isunknown({full, empty});
     endproperty
    
     
@@ -29,7 +29,7 @@ module fifo_assertion(
     else $error("full and empty asserted simultaneously!");
         
     assert property (write_while_full)
-    else $fatal (1,"write happenned on fifo full");          
+    else $error ("write happenned on fifo full");          
             
     assert property (reset_clears_fifo)
     else $error("FIFO not empty immediately after reset deasserted!");
