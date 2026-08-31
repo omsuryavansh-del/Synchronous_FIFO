@@ -1,5 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+import u_fpkg::*;
 
 class driver extends uvm_driver #(transaction);
     `uvm_component_utils(driver)
@@ -11,7 +12,7 @@ class driver extends uvm_driver #(transaction);
 
     function void build_phase (uvm_phase phase);
         super.build_phase (phase);
-        if(!uvm_config_db#(virtual u_fif)::get(this,"","vif",f_if))
+        if(!uvm_config_db#(virtual u_fif)::get(this,"","u_fif",f_if))
             `uvm_fatal("DRV","virtual interface config db not found")
     endfunction
 

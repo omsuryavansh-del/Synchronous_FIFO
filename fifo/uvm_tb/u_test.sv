@@ -24,7 +24,7 @@ class random_seq extends test;
     endfunction
 
       task run_phase(uvm_phase phase);
-        random_seq seq = write_seq::type_id::create("seq");
+        random_seq seq = random_seq::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 10);   
         phase.drop_objection(this);
@@ -56,7 +56,7 @@ class read_seq extends test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        read_seq seq = write_seq::type_id::create("seq");
+        read_seq seq = read_seq::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 8);   
         phase.drop_objection(this);
@@ -73,7 +73,7 @@ class rd_aftr_wr extends test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        rd_aftr_wr seq = write_seq::type_id::create("seq");
+        rd_aftr_wr seq = rd_aftr_wr::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 16);   
         phase.drop_objection(this);
@@ -90,7 +90,7 @@ class full_test extends test;
     endfunction
 
     task run_phase(uvm_phase phase);
-        full_test seq = write_seq::type_id::create("seq");
+        full_test seq = full_test::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 16);   
         phase.drop_objection(this);
@@ -115,8 +115,8 @@ class all_test extends test;
             gseq.num_trans = 10;  gseq.start(env.ag.sqr);
             wseq.num_trans = 8;  wseq.start(env.ag.sqr);
             rseq.num_trans = 8;  rseq.start(env.ag.sqr);
-            rd_wr.num_trans = 16;  rseq.start(env.ag.sqr);
-            fullt.num_trans = 16;  rseq.start(env.ag.sqr);
+            rd_wr.num_trans = 16;  rd_wr.start(env.ag.sqr);
+            fullt.num_trans = 16;  fullt.start(env.ag.sqr);
         phase.drop_objection(this);
     endtask
 

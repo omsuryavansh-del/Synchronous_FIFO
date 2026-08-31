@@ -1,9 +1,10 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+import u_fpkg::*;
 
 class agent extends uvm_agent;
     `uvm_component_utils(agent)
-    uvm_analysis_port items;
+    uvm_analysis_port#(transaction) items;
     
     driver dr;
     monitor mon;
@@ -25,7 +26,7 @@ class agent extends uvm_agent;
 
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
-        dr.seq_item_port.connect(tr.seq_item_port);
+        dr.seq_item_port.connect(sqr.seq_item_port);
         mon.item_collected.connect(this.items);
     endfunction
 endclass

@@ -1,6 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
-
+import u_fpkg::*;
 class scoreboard extends uvm_scoreboard;
     `uvm_component_utils(scoreboard)
     uvm_analysis_imp #(transaction, scoreboard) item_collected_export;
@@ -23,7 +23,7 @@ class scoreboard extends uvm_scoreboard;
                 $display("transaction recieved from monitor rst_n = %0b || w_en = %0b || rd_en = %0b || data_in = %0b || data_out = %0b",
                             req.rst_n,req.write_en,req.read_en,req.data_in,req.data_out);
                 if(req.write_en && (fifo.size() < 8)) begin
-                    fifo.push_back(tr.data_in);
+                    fifo.push_back(req.data_in);
                 end
                 if(req.read_en && (fifo.size() > 0))begin
                     expected = fifo.pop_front();

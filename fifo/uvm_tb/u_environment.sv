@@ -14,9 +14,9 @@ class environment extends uvm_env;
 
     function build_phase(uvm_phase phase);
         super.build_phase(phase);
-        ag = agent::type_id::create(ag);
-        scb = scoreboard::type_id::create(scb);
-        cov = coverage::type_id::create(cov);
+        ag = agent::type_id::create("ag",this);
+        scb = scoreboard::type_id::create("scb",this);
+        cov = coverage::type_id::create("cov",this);
     endfunction
 
     function void connect_phase(uvm_phase phase);

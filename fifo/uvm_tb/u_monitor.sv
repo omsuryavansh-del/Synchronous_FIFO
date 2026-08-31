@@ -1,5 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+import u_fpkg::*;
 
 class monitor extends uvm_monitor;
     `uvm_component_utils(monitor)
@@ -13,11 +14,12 @@ class monitor extends uvm_monitor;
 
     function build_phase (uvm_phase phase);
         super.build_phase(phase);
-        if(!(uvm_config_db#(virtual u_fif)::get(this,"","vif",f_if))) 
+        if(!(uvm_config_db#(virtual u_fif)::get(this,"","u_fif",f_if))) 
         `uvm_fatal("MON","config db vif not found anywhere");
     endfunction
 
 task run_phase(uvm_phase phase);
+    super.run_phase(phase);
         forever begin
             transaction tr = transaction::type_id::create("tr");
             @(posedge f_if.clk);

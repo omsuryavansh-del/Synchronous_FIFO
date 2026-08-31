@@ -1,5 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+import u_fpkg::*;
 
 class coverage extends uvm_component;
     `uvm_component_utils(coverage)
@@ -9,11 +10,6 @@ class coverage extends uvm_component;
     function new(string name = "coverage", uvm_component parent = null);
         super.new(name,parent);
         item_collected = new("item_collected",this);
-        cg = new;
-    endfunction
-
-    function build_phase (uvm_phase phase);
-        super.build_phase(phase);
     endfunction
 
     covergroup cg;
@@ -38,15 +34,20 @@ class coverage extends uvm_component;
         }
 
         write_read :cross write,read {
-            bins = binsof(write.write1) && binsof(read.read1);
-            ignore_bins = binsof(write.write0) && binsof(read.read0);
+            bins wr1_rd1 = binsof(write.write1) && binsof(read.read1);
+            ignore_bins wr0_rd0 = binsof(write.write0) && binsof(read.read0);
         }
 
         full_empty :cross full,empty {
-            illegal_bins = binsof(full.full1) && binsof(empty.empty1);
-            bins = binsof(full.full0) && binsof(empty.empty0);
+            bins full0_empty0 = binsof(full.full0) && binsof(empty.empty0);
+            illegal_bins full1_empty1 = binsof(full.full1) && binsof(empty.empty1);
         }
     endgroup
+
+    function build_phase (uvm_phase phase);
+        super.build_phase(phase);
+        cg = new();
+    endfunction
 
     function void write(transaction req);
         tr = req;

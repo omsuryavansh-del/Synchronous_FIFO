@@ -3,7 +3,7 @@ import uvm_pkg::*;
 import u_fpkg::*;
 
 class base_seq extends uvm_sequence #(transaction);
-    `uvm_object_utils(random_seq)
+    `uvm_object_utils(base_seq)
     int num_trans = 10;
     transaction tr;
 
@@ -114,13 +114,13 @@ class full_test extends base_seq;
             tr = transaction::type_id::create("tr");
             start_item(tr);
                 assert(tr.randomize() with {(write_en == 1) && (read_en ==0);})
-                    else `uvm_fatal ("GEN","randomization failed")
+                    else `uvm_fatal ("GEN","randomization failed");
             finish_item(tr);
 
             tr = transaction::type_id::create("tr");
             start_item(tr);
                 assert(tr.randomize() with {(write_en == 1) && (read_en ==1);})
-                    else `uvm_fatal ("GEN","randomization failed")
+                    else `uvm_fatal ("GEN","randomization failed");
             finish_item(tr);
         end 
     endtask
