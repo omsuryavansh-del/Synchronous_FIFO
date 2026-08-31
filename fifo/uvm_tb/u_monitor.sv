@@ -3,23 +3,25 @@ import uvm_pkg::*;
 
 class monitor extends uvm_monitor;
     `uvm_component_utils(monitor)
-    transaction tr;
+    uvm_analysis_port #(transaction) item_collected_port;
     virtual u_fif f_if;
-
-    function new(string name = "monitor", parent = null);
+    
+    function new(string name = "monitor",uvm_component parent = null);
         super.new(name,parent);
+        item_collected_port = new("item_collected_port",this);
     endfunction
 
     function build_phase (uvm_phase phase);
-        super.build_name(phase);
-        if(!(`uvm_config_db #(virtual u_fif)::get(this,"","vif","f_if"))) 
-            else `uvm_fatal("MON","config db vif not found anywhere");
+        super.build_phase(phase);
+        if(!(uvm_config_db#(virtual u_fif)::get(this,"","vif",f_if))) 
+        `uvm_fatal("MON","config db vif not found anywhere");
     endfunction
 
-    task run();
-        start_item(tr);
+task run_phase(uvm_phase phase);
+        forever begin
+            transaction tr = transaction::type_id::create("tr");
             @(posedge f_if.clk);
-            #1
+            #1;
             tr.rst_n = f_if.rst_n;
             if(f_if.rst_n)begin
                 tr.write_en = f_if.write_en; 
@@ -31,7 +33,8 @@ class monitor extends uvm_monitor;
 
                 $display("transaction sent to scoreboard rst_n = %0b || w_en = %0b || rd_en = %0b || data_in = %0b || data_out = %0b",
                     tr.rst_n,tr.write_en,tr.read_en,tr.data_in,tr.data_out);
+                item_collected_port.write(tr);
             end
-        finish_item(tr);
+        end
     endtask
 endclass

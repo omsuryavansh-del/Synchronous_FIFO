@@ -1,7 +1,8 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 
-interface fifo_if(input clk);
+interface u_fif(input clk);
+
 logic rst_n;
 logic write_en;
 logic read_en;

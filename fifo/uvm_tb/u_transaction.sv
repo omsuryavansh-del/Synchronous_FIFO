@@ -16,12 +16,12 @@ class transaction extends uvm_sequence_item;
     endfunction
 
     `uvm_object_utils_begin(transaction)
-        `uvm_field_int (UVM_DEFAULT, write_en, UVM_BIN) 
-        `uvm_field_int (UVM_DEFAULT, read_en, UVM_BIN)
-        `uvm_field_int (UVM_DEFAULT, data_in, UVM_BIN)
-        `uvm_field_int (UVM_DEFAULT, data_out, UVM_BIN) 
-        `uvm_field_int (UVM_DEFAULT, full, UVM_BIN) 
-        `uvm_field_int (UVM_DEFAULT, empty, UVM_BIN) 
+        `uvm_field_int (write_en, UVM_DEFAULT |  UVM_BIN) 
+        `uvm_field_int (read_en,  UVM_DEFAULT | UVM_BIN)
+        `uvm_field_int (data_in,  UVM_DEFAULT | UVM_BIN)
+        `uvm_field_int (data_out, UVM_DEFAULT |  UVM_BIN) 
+        `uvm_field_int (full,  UVM_DEFAULT | UVM_BIN) 
+        `uvm_field_int (empty, UVM_DEFAULT | UVM_BIN) 
     `uvm_object_utils_end
 
 endclass
