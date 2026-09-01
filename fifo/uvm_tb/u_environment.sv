@@ -1,5 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+import u_fpkg::*;
 
 class environment extends uvm_env;
     `uvm_component_utils(environment)
@@ -12,7 +13,7 @@ class environment extends uvm_env;
         super.new(name,parent);
     endfunction
 
-    function build_phase(uvm_phase phase);
+    function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         ag = agent::type_id::create("ag",this);
         scb = scoreboard::type_id::create("scb",this);

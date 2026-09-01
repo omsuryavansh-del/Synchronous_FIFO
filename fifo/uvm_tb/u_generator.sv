@@ -75,11 +75,11 @@ class read_seq extends base_seq;
 endclass
 
 
-class rd_aftr_wr extends base_seq;
-    `uvm_object_utils(rd_aftr_wr)
+class rd_aftr_wr_seq extends base_seq;
+    `uvm_object_utils(rd_aftr_wr_seq)
     transaction tr;
 
-    function new (string name = "rd_aftr_wr");
+    function new (string name = "rd_aftr_wr_seq");
         super.new(name);
     endfunction
 
@@ -101,11 +101,11 @@ class rd_aftr_wr extends base_seq;
 endclass
 
 
-class full_test extends base_seq;
-    `uvm_object_utils(full_test)
+class full_seq extends base_seq;
+    `uvm_object_utils(full_seq)
     transaction tr;
 
-    function new (string name = "full_test");
+    function new (string name = "full_seq");
         super.new(name);
     endfunction
 

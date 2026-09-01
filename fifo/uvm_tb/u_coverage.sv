@@ -7,10 +7,7 @@ class coverage extends uvm_component;
     uvm_analysis_imp #(transaction,coverage) item_collected;
     transaction tr;
 
-    function new(string name = "coverage", uvm_component parent = null);
-        super.new(name,parent);
-        item_collected = new("item_collected",this);
-    endfunction
+    
 
     covergroup cg;
         write :coverpoint  tr.write_en {
@@ -44,9 +41,14 @@ class coverage extends uvm_component;
         }
     endgroup
 
-    function build_phase (uvm_phase phase);
-        super.build_phase(phase);
+    function new(string name = "coverage", uvm_component parent = null);
+        super.new(name,parent);
+        item_collected = new("item_collected",this);
         cg = new();
+    endfunction
+
+    function void build_phase (uvm_phase phase);
+        super.build_phase(phase);
     endfunction
 
     function void write(transaction req);

@@ -17,7 +17,7 @@ class agent extends uvm_agent;
         items = new("items",this);
     endfunction
 
-    function build_phase (uvm_phase phase);
+    function void build_phase (uvm_phase phase);
         super.build_phase(phase);
         dr = driver::type_id::create("dr", this);
         mon = monitor::type_id::create("mon", this);
@@ -27,6 +27,6 @@ class agent extends uvm_agent;
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         dr.seq_item_port.connect(sqr.seq_item_port);
-        mon.item_collected.connect(this.items);
+        mon.item_collected_port.connect(this.items);
     endfunction
 endclass

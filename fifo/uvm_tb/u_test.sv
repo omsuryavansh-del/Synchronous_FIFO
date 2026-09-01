@@ -1,5 +1,6 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
+import u_fpkg::*;
 
 class test extends uvm_test;
     `uvm_component_utils(test)
@@ -15,15 +16,14 @@ class test extends uvm_test;
 
 endclass
 
-class random_seq extends test;
-    `uvm_component_utils(random_seq)
-    transaction tr;
+class random_test extends test;
+    `uvm_component_utils(random_test)
 
-    function new (uvm_component parent = null,string name = "random_seq");
+    function new (uvm_component parent = null,string name = "random_test");
         super.new(name,parent);
     endfunction
 
-      task run_phase(uvm_phase phase);
+    task run_phase(uvm_phase phase);
         random_seq seq = random_seq::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 10);   
@@ -31,11 +31,10 @@ class random_seq extends test;
     endtask
 endclass
 
-class write_seq extends test;
-    `uvm_component_utils(write_seq)
-    transaction tr;
+class write_test extends test;
+    `uvm_component_utils(write_test)
 
-    function new (uvm_component parent = null,string name = "write_seq");
+    function new (uvm_component parent = null,string name = "write_test");
         super.new(name,parent);
     endfunction
 
@@ -47,11 +46,10 @@ class write_seq extends test;
     endtask
 endclass
 
-class read_seq extends test;
-    `uvm_component_utils(read_seq)
-    transaction tr;
+class read_test extends test;
+    `uvm_component_utils(read_test)
 
-    function new (uvm_component parent = null,string name = "read_seq");
+    function new (uvm_component parent = null,string name = "read_test");
         super.new(name,parent);
     endfunction
 
@@ -66,14 +64,13 @@ endclass
 
 class rd_aftr_wr extends test;
     `uvm_component_utils(rd_aftr_wr)
-    transaction tr;
 
     function new (uvm_component parent = null,string name = "rd_aftr_wr");
         super.new(name,parent);
     endfunction
 
     task run_phase(uvm_phase phase);
-        rd_aftr_wr seq = rd_aftr_wr::type_id::create("seq");
+        rd_aftr_wr_seq seq = rd_aftr_wr_seq::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 16);   
         phase.drop_objection(this);
@@ -83,14 +80,13 @@ endclass
 
 class full_test extends test;
     `uvm_component_utils(full_test)
-    transaction tr;
 
     function new (uvm_component parent = null,string name = "full_test");
         super.new(name,parent);
     endfunction
 
     task run_phase(uvm_phase phase);
-        full_test seq = full_test::type_id::create("seq");
+        full_seq seq = full_seq::type_id::create("seq");
         phase.raise_objection(this);
         seq.start_with(env.ag.sqr, 16);   
         phase.drop_objection(this);
@@ -107,16 +103,16 @@ class all_test extends test;
         random_seq  gseq = random_seq::type_id::create("gseq");
         write_seq   wseq = write_seq::type_id::create("wseq");
         read_seq    rseq = read_seq::type_id::create("rseq");
-        rd_aftr_wr  rd_wr = rd_aftr_wr::type_id::create("rd_wr");
-        full_test   fullt = full_test::type_id::create("fullt");
+        rd_aftr_wr_seq  rd_wr = rd_aftr_wr_seq::type_id::create("rd_wr");
+        full_seq   fullt = full_seq::type_id::create("fullt");
 
 
         phase.raise_objection(this);
-            gseq.num_trans = 10;  gseq.start(env.ag.sqr);
-            wseq.num_trans = 8;  wseq.start(env.ag.sqr);
-            rseq.num_trans = 8;  rseq.start(env.ag.sqr);
-            rd_wr.num_trans = 16;  rd_wr.start(env.ag.sqr);
-            fullt.num_trans = 16;  fullt.start(env.ag.sqr);
+            gseq.start_with(env.ag.sqr,10);
+            wseq.start_with(env.ag.sqr,8);
+            rseq.start_with(env.ag.sqr,8);
+            rd_wr.start_with(env.ag.sqr,16);
+            fullt.start_with(env.ag.sqr,16);
         phase.drop_objection(this);
     endtask
 

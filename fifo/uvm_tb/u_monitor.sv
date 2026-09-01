@@ -12,7 +12,7 @@ class monitor extends uvm_monitor;
         item_collected_port = new("item_collected_port",this);
     endfunction
 
-    function build_phase (uvm_phase phase);
+    function void build_phase (uvm_phase phase);
         super.build_phase(phase);
         if(!(uvm_config_db#(virtual u_fif)::get(this,"","u_fif",f_if))) 
         `uvm_fatal("MON","config db vif not found anywhere");

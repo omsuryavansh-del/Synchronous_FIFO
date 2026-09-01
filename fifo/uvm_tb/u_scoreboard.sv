@@ -1,6 +1,7 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 import u_fpkg::*;
+
 class scoreboard extends uvm_scoreboard;
     `uvm_component_utils(scoreboard)
     uvm_analysis_imp #(transaction, scoreboard) item_collected_export;
@@ -9,43 +10,43 @@ class scoreboard extends uvm_scoreboard;
     int pass = 0;
     int fail = 0;
 
-        function new(string name = "scoreboard",uvm_component parent = null);
-            super.new(name,parent);
-            item_collected_export = new("item_collected_export", this);
-        endfunction
+    function new(string name = "scoreboard",uvm_component parent = null);
+        super.new(name,parent);
+        item_collected_export = new("item_collected_export", this);
+    endfunction
 
-        function build_phase (uvm_phase phase);
-            super.build_phase(phase);
-        endfunction
+    function void build_phase (uvm_phase phase);
+        super.build_phase(phase);
+    endfunction
 
-        function void write(transaction req);
-            bit did_pop = 0;
-                $display("transaction recieved from monitor rst_n = %0b || w_en = %0b || rd_en = %0b || data_in = %0b || data_out = %0b",
-                            req.rst_n,req.write_en,req.read_en,req.data_in,req.data_out);
-                if(req.write_en && (fifo.size() < 8)) begin
-                    fifo.push_back(req.data_in);
+    function void write(transaction req);
+        bit did_pop = 0;
+            $display("transaction recieved from monitor rst_n = %0b || w_en = %0b || rd_en = %0b || data_in = %0b || data_out = %0b",
+                        req.rst_n,req.write_en,req.read_en,req.data_in,req.data_out);
+            if(req.write_en && (fifo.size() < 8)) begin
+                fifo.push_back(req.data_in);
+            end
+            if(req.read_en && (fifo.size() > 0))begin
+                expected = fifo.pop_front();
+                did_pop = 1;
+            end
+            
+            if((fifo.size() == 8) !== req.full) $display("full mismatch expected = %0d || got = %0d",fifo.size(),req.full);
+            if((fifo.size() == 0) !== req.empty) $display("empty mismatch expected = %0d || got = %0d",fifo.size(),req.empty);
+            if(did_pop) begin
+                if(expected !== req.data_out) begin
+                    `uvm_info("RESuLT",$sformatf("test failed rst_n = %0b | expected = %0b || data_in = %0b || got :: w_en = %0b || rd_en = %0b || data_out = %0b ",
+                                req.rst_n, expected, req.data_in, req.write_en, req.read_en, req.data_out),UVM_HIGH)
+                    $display("\n=========================================\n");
+                    fail++;
                 end
-                if(req.read_en && (fifo.size() > 0))begin
-                    expected = fifo.pop_front();
-                    did_pop = 1;
+                else begin 
+                    `uvm_info("RESULT",$sformatf("test passed expected :: %0b || data out = %0d ",expected,req.data_out),UVM_HIGH)
+                    $display("\n=========================================\n");
+                    pass++;
                 end
-                
-                if((fifo.size() == 8) !== req.full) $display("full mismatch expected = %0d || got = %0d",fifo.size(),req.full);
-                if((fifo.size() == 0) !== req.empty) $display("empty mismatch expected = %0d || got = %0d",fifo.size(),req.empty);
-                if(did_pop) begin
-                    if(expected !== req.data_out) begin
-                        `uvm_info("RESuLT",$sformatf("test failed rst_n = %0b | expected = %0b || data_in = %0b || got :: w_en = %0b || rd_en = %0b || data_out = %0b ",
-                                    req.rst_n, expected, req.data_in, req.write_en, req.read_en, req.data_out),UVM_HIGH)
-                        $display("\n=========================================\n");
-                        fail++;
-                    end
-                    else begin 
-                        `uvm_info("RESULT",$sformatf("test passed expected :: %0b || data out = %0d ",expected,req.data_out),UVM_HIGH)
-                        $display("\n=========================================\n");
-                        pass++;
-                    end
-                end       
-        endfunction
+            end       
+    endfunction
 
     function void report_phase(uvm_phase phase);
         super.report_phase(phase);
