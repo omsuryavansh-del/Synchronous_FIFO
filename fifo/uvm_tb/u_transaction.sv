@@ -10,10 +10,6 @@ class transaction extends uvm_sequence_item;
     logic [7:0] data_out;
     logic full;
     logic empty;
-    
-    function new(string name = "transaction");
-        super.new(name);
-    endfunction
 
     `uvm_object_utils_begin(transaction)
         `uvm_field_int (write_en, UVM_DEFAULT |  UVM_BIN) 
@@ -23,5 +19,8 @@ class transaction extends uvm_sequence_item;
         `uvm_field_int (full,  UVM_DEFAULT | UVM_BIN) 
         `uvm_field_int (empty, UVM_DEFAULT | UVM_BIN) 
     `uvm_object_utils_end
-
+    
+    function new(string name = "transaction");
+        super.new(name);
+    endfunction
 endclass

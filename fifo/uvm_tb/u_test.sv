@@ -19,7 +19,7 @@ endclass
 class random_test extends test;
     `uvm_component_utils(random_test)
 
-    function new (uvm_component parent = null,string name = "random_test");
+    function new (string name = "random_test",uvm_component parent = null);
         super.new(name,parent);
     endfunction
 
@@ -34,7 +34,7 @@ endclass
 class write_test extends test;
     `uvm_component_utils(write_test)
 
-    function new (uvm_component parent = null,string name = "write_test");
+    function new (string name = "write_test",uvm_component parent = null);
         super.new(name,parent);
     endfunction
 
@@ -49,7 +49,7 @@ endclass
 class read_test extends test;
     `uvm_component_utils(read_test)
 
-    function new (uvm_component parent = null,string name = "read_test");
+    function new (string name = "read_test",uvm_component parent = null);
         super.new(name,parent);
     endfunction
 
@@ -65,7 +65,7 @@ endclass
 class rd_aftr_wr extends test;
     `uvm_component_utils(rd_aftr_wr)
 
-    function new (uvm_component parent = null,string name = "rd_aftr_wr");
+    function new (string name = "rd_aftr_wr",uvm_component parent = null);
         super.new(name,parent);
     endfunction
 
@@ -81,7 +81,7 @@ endclass
 class full_test extends test;
     `uvm_component_utils(full_test)
 
-    function new (uvm_component parent = null,string name = "full_test");
+    function new (string name = "full_test",uvm_component parent = null);
         super.new(name,parent);
     endfunction
 
@@ -108,11 +108,25 @@ class all_test extends test;
 
 
         phase.raise_objection(this);
-            gseq.start_with(env.ag.sqr,10);
-            wseq.start_with(env.ag.sqr,8);
-            rseq.start_with(env.ag.sqr,8);
-            rd_wr.start_with(env.ag.sqr,16);
-            fullt.start_with(env.ag.sqr,16);
+            `uvm_info("ALL_TEST", "starting random_seq", UVM_LOW)
+            gseq.start_with(env.ag.sqr, 10);
+            `uvm_info("ALL_TEST", "random_seq finished", UVM_LOW)
+
+            `uvm_info("ALL_TEST", "starting write_seq", UVM_LOW)
+            wseq.start_with(env.ag.sqr, 8);
+            `uvm_info("ALL_TEST", "write_seq finished", UVM_LOW)
+        
+            `uvm_info("ALL_TEST", "starting read_seq", UVM_LOW)
+            rseq.start_with(env.ag.sqr, 8);
+            `uvm_info("ALL_TEST", "read_seq finished", UVM_LOW)
+        
+            `uvm_info("ALL_TEST", "starting rd_aftr_wr_seq", UVM_LOW)
+            rd_wr.start_with(env.ag.sqr, 16);
+            `uvm_info("ALL_TEST", "rd_aftr_wr_seq finished", UVM_LOW)
+        
+            `uvm_info("ALL_TEST", "starting full_seq", UVM_LOW)
+            fullt.start_with(env.ag.sqr, 16);
+            `uvm_info("ALL_TEST", "full_seq finished", UVM_LOW)
         phase.drop_objection(this);
     endtask
 

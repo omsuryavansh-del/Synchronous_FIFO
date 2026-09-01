@@ -26,7 +26,7 @@ class agent extends uvm_agent;
 
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
-        dr.seq_item_port.connect(sqr.seq_item_port);
+        dr.seq_item_port.connect(sqr.seq_item_export);
         mon.item_collected_port.connect(this.items);
     endfunction
 endclass

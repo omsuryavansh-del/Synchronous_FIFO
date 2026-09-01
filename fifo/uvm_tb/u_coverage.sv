@@ -7,8 +7,6 @@ class coverage extends uvm_component;
     uvm_analysis_imp #(transaction,coverage) item_collected;
     transaction tr;
 
-    
-
     covergroup cg;
         write :coverpoint  tr.write_en {
             bins write1 = {1};

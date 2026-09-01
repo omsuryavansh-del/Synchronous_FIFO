@@ -16,6 +16,17 @@ class driver extends uvm_driver #(transaction);
             `uvm_fatal("DRV","virtual interface config db not found")
     endfunction
 
+    task reset_phase(uvm_phase phase);
+        phase.raise_objection(this);
+        f_if.rst_n     = 0;
+        f_if.write_en  = 0;
+        f_if.read_en   = 0;
+        f_if.data_in   = 0;
+        repeat(2) @(posedge f_if.clk);
+        f_if.rst_n = 1;
+        phase.drop_objection(this);
+    endtask
+
     task run_phase (uvm_phase phase);
         forever begin
             seq_item_port.get_next_item(req);
