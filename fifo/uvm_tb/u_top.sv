@@ -2,10 +2,13 @@
 `include "../rtl/fifo.v"
 `include "u_fif.sv"
 `include "fifo_assertion.sv"
+
 import uvm_pkg::*;
 import u_fpkg::*;
 
+
 module top;
+
     reg clk;
     u_fif f_if(clk);
 
